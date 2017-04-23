@@ -49,3 +49,8 @@ scan table
 # Kakfa
 
 kafka-topics --create --zookeeper HOSTNAME:2181--replication-factor 1 --partitions 1 --topic general
+
+
+# Find uniq line length
+
+ cat /var/log/secure | awk -F'[ ]' '{print NF, $0}' | sort  | uniq
