@@ -3,6 +3,8 @@
 
 spark-submit --master local[4]  --class DirectKafkaWordCount  target/Secure-1.0-SNAPSHOT-jar-with-dependencies.jar
 
+spark-submit --driver-class-path `hbase classpath`  --files /etc/hbase/conf/core-site.xml --master local[4]  --class DirectKafkaWordCount  target/Secure-1.0-SNAPSHOT-jar-with-dependencies.jar logins:invalids user 
+
 # Hbase stuff
 
 create namespace
