@@ -62,6 +62,8 @@ object DirectKafkaWordCount {
 
 
        messagesLength16.foreachRDD{rdd =>
+         println("Writing to hbase table "+tableName)
+         rdd.foreach(println)
          rdd.map(HbaseRecord.convertToPut(_,args(1)))
        }
 
