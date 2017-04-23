@@ -54,3 +54,12 @@ kafka-topics --create --zookeeper HOSTNAME:2181--replication-factor 1 --partitio
 # Find uniq line length
 
  cat /var/log/secure | awk -F'[ ]' '{print NF, $0}' | sort  | uniq
+ 
+ [root@8ed7f ~]# grep Invalid /var/log/secure | awk -F'[ ]' '{print NF, $0}' | tail -n 3
+
+10 Apr 23 23:52:04 8ed7f sshd[5750]: Invalid user admin from 37.229.172.66
+
+10 Apr 23 23:54:33 8ed7f sshd[6442]: Invalid user developer from 150.95.143.209
+
+10 Apr 24 00:11:01 8ed7f sshd[10910]: Invalid user 123 from 150.95.143.209
+
