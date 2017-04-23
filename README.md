@@ -3,6 +3,8 @@
 
 spark-submit --master local[4]  --class DirectKafkaWordCount  target/Secure-1.0-SNAPSHOT-jar-with-dependencies.jar
 
+spark-submit --driver-class-path `hbase classpath`  --files /etc/hbase/conf/core-site.xml --master local[4]  --class DirectKafkaWordCount  target/Secure-1.0-SNAPSHOT-jar-with-dependencies.jar logins:invalids user 
+
 # Hbase stuff
 
 create namespace
@@ -12,6 +14,18 @@ create namespace
 create table
       
        create 'logins:invalids','user'
+       
+disable table
+
+       disable 'logins:invalids'
+       
+delete table
+
+       drop 'logins:invalids'
+       
+scan table
+
+      scan 'logins:invalids'
 # Flume
 
  tier1.sources  = source1
@@ -35,3 +49,8 @@ create table
 # Kakfa
 
 kafka-topics --create --zookeeper HOSTNAME:2181--replication-factor 1 --partitions 1 --topic general
+
+
+# Find uniq line length
+
+ cat /var/log/secure | awk -F'[ ]' '{print NF, $0}' | sort  | uniq
