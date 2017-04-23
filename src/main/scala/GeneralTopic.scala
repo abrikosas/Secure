@@ -39,8 +39,8 @@ object DirectKafkaWordCount {
     Logger.getLogger("org").setLevel(Level.OFF)
     Logger.getLogger("akka").setLevel(Level.OFF)
 
-    val sparkConf = new SparkConf().setAppName("DirectKafkaWordCount")
-    val sc = new SparkContext(sparkConf)
+    //val sparkConf = new SparkConf().setAppName("DirectKafkaWordCount")
+    val sc = new SparkContext(new SparkConf().setAppName("DirectKafkaWordCount"))
     val tableName = args(0)
     val conf = HBaseConfiguration.create()
     conf.set(TableOutputFormat.OUTPUT_TABLE, tableName)
@@ -48,7 +48,7 @@ object DirectKafkaWordCount {
     jobConfig.set("mapreduce.output.fileoutputformat.outputdir", "/tmp/out")
     jobConfig.setOutputFormat(classOf[TableOutputFormat])
     jobConfig.set(TableOutputFormat.OUTPUT_TABLE, tableName)
-    val ssc = new StreamingContext(sparkConf, Seconds(2))
+    val ssc = new StreamingContext(sc, Seconds(2))
 
 
    val hbaseContext = new HBaseContext(sc,conf )
