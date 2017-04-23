@@ -12,6 +12,8 @@ import java.io.IOException
 
 import kafka.serializer.StringDecoder
 import org.apache.hadoop.hbase.HBaseConfiguration
+import org.apache.hadoop.hbase.client.Put
+import org.apache.hadoop.hbase.io.ImmutableBytesWritable
 import org.apache.hadoop.hbase.mapred.TableOutputFormat
 import org.apache.hadoop.mapred.JobConf
 import org.apache.spark.streaming._
@@ -22,6 +24,7 @@ import org.apache.spark.streaming
 import org.apache.log4j.{Level, Logger, PropertyConfigurator}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkContext, SparkException}
+import org.apache.hadoop.hbase.spark.HBaseContext
 
 
 
@@ -37,6 +40,7 @@ object DirectKafkaWordCount {
     Logger.getLogger("akka").setLevel(Level.OFF)
 
     val sparkConf = new SparkConf().setAppName("DirectKafkaWordCount")
+    val sc = new SparkContext(sparkConf)
     val tableName = args(0)
     val conf = HBaseConfiguration.create()
     conf.set(TableOutputFormat.OUTPUT_TABLE, tableName)
@@ -44,10 +48,11 @@ object DirectKafkaWordCount {
     jobConfig.set("mapreduce.output.fileoutputformat.outputdir", "/tmp/out")
     jobConfig.setOutputFormat(classOf[TableOutputFormat])
     jobConfig.set(TableOutputFormat.OUTPUT_TABLE, tableName)
-
-
-
     val ssc = new StreamingContext(sparkConf, Seconds(2))
+
+
+   val hbaseContext = new HBaseContext(sc,conf )
+
     try {
 
       log.info("Connecting to broker list")
@@ -55,7 +60,7 @@ object DirectKafkaWordCount {
 
       val messages = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](ssc, kafkaParams, Set("general"))
 
-      val messagesLength16 = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](
+      val messagesLength16: DStream[InvalidUserAttack] = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](
         ssc, kafkaParams, Set("general")).map(_._2).map(_.split(" ")).filter(_.length == 16).map(HbaseRecord.parseEvent)
 
 
@@ -64,7 +69,8 @@ object DirectKafkaWordCount {
        messagesLength16.foreachRDD{rdd =>
          println("Writing to hbase table "+tableName)
          rdd.foreach(println)
-         rdd.map(HbaseRecord.convertToPut(_,args(1)))
+         rdd.map(HbaseRecord.convertToPut(_,args(1))).saveAsNewAPIHadoopDataset(conf)
+
        }
 
 
