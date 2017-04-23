@@ -11,7 +11,7 @@ create namespace
 
 create table
       
-       create 'logins:invalids','event user'
+       create 'logins:invalids','user'
 # Flume
 
  tier1.sources  = source1
