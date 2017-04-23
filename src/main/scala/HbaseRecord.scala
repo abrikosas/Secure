@@ -19,8 +19,10 @@ object HbaseRecord extends Serializable {
   //  Convert a row of Attack object data to an HBase put object
   def convertToPut(attack: InvalidUserAttack,cf:String): (ImmutableBytesWritable, Put) = {
     val dateTime = attack.timestamp
+    println("Event date:"+dateTime)
     // create a composite row key: Attackid_date time
     val rowkey = attack.ip
+    println("Key :"+ rowkey)
     val put = new Put(Bytes.toBytes(rowkey))
     // add to column family data, column  data values to put object
     put.add(Bytes.toBytes(cf), Bytes.toBytes(dateTime), Bytes.toBytes(attack.realuser))
