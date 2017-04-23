@@ -12,7 +12,7 @@ create namespace
 create table
       
        create 'logins:invalids','event user'
-#Flume
+# Flume
 
  tier1.sources  = source1
  tier1.channels = channel1
@@ -32,6 +32,6 @@ create table
  tier1.sinks.sink1.channel = channel1
  tier1.sinks.sink1.batchSize = 20
        
-#Kakfa
+# Kakfa
 
 kafka-topics --create --zookeeper fmak.lt:2181--replication-factor 1 --partitions 1 --topic general
