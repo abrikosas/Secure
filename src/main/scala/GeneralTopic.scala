@@ -61,7 +61,7 @@ object DirectKafkaWordCount {
       val messages = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](ssc, kafkaParams, Set("general"))
 
       val messagesLength16: DStream[InvalidUserAttack] = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](
-        ssc, kafkaParams, Set("general")).map(_._2).map(_.split(" ")).filter(_.length == 16).map(HbaseRecord.parseEvent)
+        ssc, kafkaParams, Set("general")).map(_._2).filter(_.contains("Invalid")).map(_.split(" ")).filter(_.length == 10).map(HbaseRecord.parseEvent)
 
 
 
