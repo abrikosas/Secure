@@ -14,6 +14,12 @@ create namespace
 create table
       
        create 'logins:invalids','user'
+       
+disable table
+       disable 'logins:invalids'
+       
+delete table
+       drop 'logins:invalids'
 # Flume
 
  tier1.sources  = source1
