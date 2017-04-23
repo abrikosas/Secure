@@ -25,7 +25,7 @@ object HbaseRecord extends Serializable {
     println("Key :"+ rowkey)
     val put = new Put(Bytes.toBytes(rowkey))
     // add to column family data, column  data values to put object
-    put.add(Bytes.toBytes(cf), Bytes.toBytes(dateTime), Bytes.toBytes(attack.realuser))
+    put.add(Bytes.toBytes(cf), Bytes.toBytes(attack.realuser), Bytes.toBytes(dateTime))
     return (new ImmutableBytesWritable(Bytes.toBytes(rowkey)), put)
   }
 
