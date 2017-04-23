@@ -1,9 +1,9 @@
 
 import kafka.serializer.StringDecoder
-
 import org.apache.spark.streaming._
 import org.apache.spark.streaming.kafka._
 import org.apache.spark.SparkConf
+import org.apache.spark.streaming.dstream.DStream
 
 
 object DirectKafkaWordCount  {
@@ -25,6 +25,8 @@ object DirectKafkaWordCount  {
 
     // Get the lines, split them into words, count the words and print
     val lines = messages.map(_._2)
+    val msgLength= lines.flatMap(_.split(" ")).count()
+    println(msgLength)
     val words = lines.flatMap(_.split(" "))
     val wordCounts = words.map(x => (x, 1L)).reduceByKey(_ + _)
     wordCounts.print()
