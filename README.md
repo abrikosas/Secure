@@ -34,4 +34,4 @@ create table
        
 # Kakfa
 
-kafka-topics --create --zookeeper fmak.lt:2181--replication-factor 1 --partitions 1 --topic general
+kafka-topics --create --zookeeper HOSTNAME:2181--replication-factor 1 --partitions 1 --topic general
