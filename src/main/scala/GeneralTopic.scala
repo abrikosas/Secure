@@ -11,6 +11,7 @@
 import java.io.IOException
 
 import kafka.serializer.StringDecoder
+import org.apache.hadoop.hbase.HBaseConfiguration
 import org.apache.hadoop.hbase.mapred.TableOutputFormat
 import org.apache.hadoop.mapred.JobConf
 import org.apache.spark.streaming._
@@ -36,11 +37,13 @@ object DirectKafkaWordCount {
     Logger.getLogger("akka").setLevel(Level.OFF)
 
     val sparkConf = new SparkConf().setAppName("DirectKafkaWordCount")
-
+    val tableName = args(0)
+    val conf = HBaseConfiguration.create()
+    conf.set(TableOutputFormat.OUTPUT_TABLE, tableName)
     val jobConfig: JobConf = new JobConf(conf, this.getClass)
     jobConfig.set("mapreduce.output.fileoutputformat.outputdir", "/tmp/out")
     jobConfig.setOutputFormat(classOf[TableOutputFormat])
-    jobConfig.set(TableOutputFormat.OUTPUT_TABLE, args(0))
+    jobConfig.set(TableOutputFormat.OUTPUT_TABLE, tableName)
 
 
 
