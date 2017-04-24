@@ -6,14 +6,14 @@ import org.apache.hadoop.hbase.util.Bytes
 case class FailedUserAttack(timestamp: String, realuser: String, ip: String)
 
 object HbaseRecordFailed extends Serializable {
-  final val patternList = List("Failed","failed")
+  final val patternList = List("Failed","root")
 
   def parseEvent(str: Array[String]): FailedUserAttack = {
     //  val a = str.split("\\s+").filter(_.length == 16).filter(l => patternList.exists(_.contains()))
-    //val a = str.split("\\s+").filter(l => patternList.exists(_.contains()))
+    val a = str.split("\\s+").filter(l => patternList.exists(_.contains()))
 
     //InvalidUserAttack(a(0) + " " + a(1) + " " + a(2), a(9), a(12))
-    FailedUserAttack(str(0) + " " + str(1) + " " + str(2), str(8), str(10))
+    FailedUserAttack(a(0) + " " + a(1) + " " + a(2), a(9), a(10))
   }
 
   //  Convert a row of Attack object data to an HBase put object
