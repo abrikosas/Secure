@@ -88,13 +88,13 @@ object DirectKafkaWordCount {
       }
 
 
-      val lines = messages.map(_._2)
+   /*   val lines = messages.map(_._2)
       val msgLength: DStream[String] = lines.flatMap(_.split(" "))
       println(msgLength)
       val words: DStream[String] = lines.flatMap(_.split(" "))
       val wordCounts: DStream[(String, Long)] = words.map(x => (x, 1L)).reduceByKey(_ + _)
       wordCounts.print()
-
+*/
       ssc.start()
       ssc.awaitTermination()
     } catch {
