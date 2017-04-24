@@ -25,6 +25,7 @@ import org.apache.log4j.{Level, Logger, PropertyConfigurator}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkContext, SparkException}
 import org.apache.hadoop.hbase.spark.HBaseContext
+import org.apache.kafka.clients.consumer.ConsumerConfig
 
 
 
@@ -50,7 +51,8 @@ object DirectKafkaWordCount {
     jobConfig.set(TableOutputFormat.OUTPUT_TABLE, tableName)
     val ssc = new StreamingContext(sc, Seconds(2))
     //ssc.checkpoint("/tmp/pipi")
-
+    val pollTimeout = "1000"
+    val offsetReset = "earliest"
 
    val hbaseContext = new HBaseContext(sc,conf )
 
@@ -58,7 +60,14 @@ object DirectKafkaWordCount {
 
       log.info("Connecting to broker list")
       val kafkaParams = Map[String, String]("metadata.broker.list" -> "fmak.lt:9092,94.176.235.138:9092",
-                                            "zookeeper.connect" -> "fmak.lt:2181,94.176.235.138:2181")
+                                            "zookeeper.connect" -> "fmak.lt:2181,94.176.235.138:2181",
+        ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG ->
+          "org.apache.kafka.common.serialization.StringDeserializer",
+        ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG ->
+          "org.apache.kafka.common.serialization.StringDeserializer",
+        ConsumerConfig.AUTO_OFFSET_RESET_CONFIG -> offsetReset,
+        ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG -> "false",
+        "spark.kafka.poll.time" -> pollTimeout)
 
       val messages = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](ssc, kafkaParams, Set("general"))
 
