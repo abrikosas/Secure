@@ -60,19 +60,32 @@ object DirectKafkaWordCount {
 
       val messages = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](ssc, kafkaParams, Set("general"))
 
-      val messagesLength16: DStream[InvalidUserAttack] = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](
+      val messagesLength10: DStream[InvalidUserAttack] = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](
         ssc, kafkaParams, Set("general")).map(_._2).filter(_.contains("Invalid")).map(_.split(" ")).filter(_.length == 10).map(HbaseRecord.parseEvent)
 
 
 
 
-       messagesLength16.foreachRDD{rdd =>
+       messagesLength10.foreachRDD{rdd =>
          println("Writing to hbase table "+tableName)
          rdd.foreach(println)
          rdd.map(HbaseRecord.convertToPut(_,args(1))).saveAsHadoopDataset(jobConfig)
 
        }
 
+      val messagesLength16= KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](
+        ssc, kafkaParams, Set("general")).map(_._2).filter(_.contains("Failed")).map(_.split(" ")).filter(_.length == 16).
+        map(HbaseRecordFailed.parseEvent)
+
+
+
+      messagesLength16.foreachRDD{ rdd =>
+
+        rdd.map(HbaseRecordFailed.convertToPut(_,args(1))).saveAsHadoopDataset(jobConfig)
+
+
+
+      }
 
 
       val lines = messages.map(_._2)
