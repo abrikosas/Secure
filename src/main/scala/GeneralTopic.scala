@@ -60,10 +60,9 @@ object DirectKafkaWordCount {
 
       log.info("Connecting to broker list")
       val kafkaParams = Map[String, String]("metadata.broker.list" -> "fmak.lt:9092,94.176.235.138:9092",
-                                            "zookeeper.connect" -> "fmak.lt:2181,94.176.235.138:2181",
+                                            "zookeeper.connect" -> "fmak.lt:2181,94.176.235.138:2181"
 
-        ConsumerConfig.AUTO_OFFSET_RESET_CONFIG -> offsetReset,
-        ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG -> "false"
+
        )
 
       val messages = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](ssc, kafkaParams, Set("general"))
@@ -72,7 +71,7 @@ object DirectKafkaWordCount {
         ssc, kafkaParams, Set("general")).map(_._2).filter(_.contains("Invalid")).map(_.split(" ")).filter(_.length == 10).map(HbaseRecord.parseEvent)
 
 
-
+       messagesLength10.print()
 
        messagesLength10.foreachRDD{rdd =>
          println("Writing to hbase table "+tableName)
@@ -90,9 +89,11 @@ object DirectKafkaWordCount {
         map(HbaseRecordFailed.parseEvent)
 
 
-
+      messagesLength16.print()
 
       messagesLength16.foreachRDD{ rdd =>
+
+        rdd.foreach(println)
 
         rdd.map(HbaseRecordFailed.convertToPut(_,args(1))).saveAsHadoopDataset(jobConfig)
 
