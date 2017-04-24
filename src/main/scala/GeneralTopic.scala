@@ -74,9 +74,14 @@ object DirectKafkaWordCount {
 
        }*/
 
-      val messagesLength16= KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](
+      /*val messagesLength16= KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](
         ssc, kafkaParams, Set("general")).map(_._2).filter(_.contains("Failed")).map(_.split(" ")).filter(_.length == 16).
         map(HbaseRecordFailed.parseEvent)
+*/
+      val messagesLength16= KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](
+        ssc, kafkaParams, Set("general")).map(_._2).map(_.split(" ")).filter(_.length == 16).
+        map(HbaseRecordFailed.parseEvent)
+
 
 
 
