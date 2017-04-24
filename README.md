@@ -57,6 +57,8 @@ scan table
 
 kafka-topics --create --zookeeper HOSTNAME:2181--replication-factor 1 --partitions 1 --topic general
 
+kafka-console-consumer --zookeeper HOSTNAME:2181 --topic general --from-beginning
+
 
 # Find uniq line length
 
