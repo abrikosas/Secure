@@ -1,3 +1,10 @@
+# Preparing environment
+
+wget https://archive.cloudera.com/cm5/installer/latest/cloudera-manager-installer.bin
+
+
+
+
 # Secure
 
 
