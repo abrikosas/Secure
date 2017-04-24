@@ -49,7 +49,7 @@ object DirectKafkaWordCount {
     jobConfig.set("mapreduce.output.fileoutputformat.outputdir", "/tmp/out")
     jobConfig.setOutputFormat(classOf[TableOutputFormat])
     jobConfig.set(TableOutputFormat.OUTPUT_TABLE, tableName)
-    val ssc = new StreamingContext(sc, Seconds(10))
+    val ssc = new StreamingContext(sc, Seconds(2))
     //ssc.checkpoint("/tmp/pipi")
     val pollTimeout = "1000"
     val offsetReset = "earliest"
@@ -80,13 +80,13 @@ object DirectKafkaWordCount {
 
        }
 
-      /*val messagesLength16= KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](
-        ssc, kafkaParams, Set("general")).map(_._2).filter(_.contains("Failed")).map(_.split(" ")).filter(_.length == 16).
-        map(HbaseRecordFailed.parseEvent)
-*/
       val messagesLength16= KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](
-        ssc, kafkaParams, Set("general")).map(_._2).map(_.split(" ")).filter(_.length == 16).
+        ssc, kafkaParams, Set("general")).map(_._2).filter(_.contains("root")).map(_.split(" ")).filter(_.length == 16).
         map(HbaseRecordFailed.parseEvent)
+
+  /*    val messagesLength16= KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](
+        ssc, kafkaParams, Set("general")).map(_._2).map(_.split(" ")).filter(_.length == 16).
+        map(HbaseRecordFailed.parseEvent)*/
 
 
       messagesLength16.print()
