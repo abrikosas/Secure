@@ -49,7 +49,7 @@ object DirectKafkaWordCount {
     jobConfig.setOutputFormat(classOf[TableOutputFormat])
     jobConfig.set(TableOutputFormat.OUTPUT_TABLE, tableName)
     val ssc = new StreamingContext(sc, Seconds(10))
-    ssc.checkpoint("/tmp/pipi")
+    //ssc.checkpoint("/tmp/pipi")
 
 
    val hbaseContext = new HBaseContext(sc,conf )
