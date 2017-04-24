@@ -55,9 +55,11 @@ scan table
        
 # Kakfa
 
-kafka-topics --create --zookeeper HOSTNAME:2181--replication-factor 1 --partitions 1 --topic general
+kafka-topics --create --zookeeper HOSTNAME:2181--replication-factor 1 --partitions 12 --topic general
 
 kafka-console-consumer --zookeeper HOSTNAME:2181 --topic general --from-beginning
+
+kafka-topics --delete --zookeeper localhost:2181 --topic general
 
 
 # Find uniq line length
