@@ -10,10 +10,10 @@ object HbaseRecordFailed extends Serializable {
 
   def parseEvent(str: Array[String]): FailedUserAttack = {
     //  val a = str.split("\\s+").filter(_.length == 16).filter(l => patternList.exists(_.contains()))
-    val a = str.split("\\s+").filter(l => patternList.exists(_.contains()))
+   // val a = str.split("\\s+").filter(l => patternList.exists(_.contains()))
 
     //InvalidUserAttack(a(0) + " " + a(1) + " " + a(2), a(9), a(12))
-    FailedUserAttack(a(0) + " " + a(1) + " " + a(2), a(9), a(10))
+    FailedUserAttack(str(0) + " " + str(1) + " " + str(2), str(9), str(10))
   }
 
   //  Convert a row of Attack object data to an HBase put object
