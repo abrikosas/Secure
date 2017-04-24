@@ -61,10 +61,7 @@ object DirectKafkaWordCount {
       log.info("Connecting to broker list")
       val kafkaParams = Map[String, String]("metadata.broker.list" -> "fmak.lt:9092,94.176.235.138:9092",
                                             "zookeeper.connect" -> "fmak.lt:2181,94.176.235.138:2181",
-        ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG ->
-          "org.apache.kafka.common.serialization.StringDeserializer",
-        ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG ->
-          "org.apache.kafka.common.serialization.StringDeserializer",
+
         ConsumerConfig.AUTO_OFFSET_RESET_CONFIG -> offsetReset,
         ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG -> "false"
        )
