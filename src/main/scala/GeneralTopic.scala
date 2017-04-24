@@ -48,7 +48,7 @@ object DirectKafkaWordCount {
     jobConfig.set("mapreduce.output.fileoutputformat.outputdir", "/tmp/out")
     jobConfig.setOutputFormat(classOf[TableOutputFormat])
     jobConfig.set(TableOutputFormat.OUTPUT_TABLE, tableName)
-    val ssc = new StreamingContext(sc, Seconds(10))
+    val ssc = new StreamingContext(sc, Seconds(2))
     //ssc.checkpoint("/tmp/pipi")
 
 
